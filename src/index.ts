@@ -1,3 +1,4 @@
-import { log } from './module';
+import { app } from './app';
+import { APP_PORT } from './consts/app.consts';
 
-log(6);
+app.listen(APP_PORT);

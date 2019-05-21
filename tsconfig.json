@@ -8,6 +8,7 @@
     "moduleResolution": "node",
     "outDir": "dist",
     "baseUrl": ".",
+    "esModuleInterop": true,
     "paths": {
       "*": ["node_modules/*", "src/types/*"]
     },
