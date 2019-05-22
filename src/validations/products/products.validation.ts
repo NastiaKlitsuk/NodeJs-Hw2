@@ -7,7 +7,7 @@ import {
 
 export function send404ForNotExistingProduct(
   isExist: boolean,
-  response: Response
+  response: Response,
 ): boolean {
   if (!isExist) {
     send404(response);
@@ -27,7 +27,7 @@ export function send400ForInvalidProductId(id: string, response: Response) {
 
 export function send409ForInvalidProductName(
   productName: string,
-  response: Response
+  response: Response,
 ) {
   if (productName.length < 3) {
     send409(response);
