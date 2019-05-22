@@ -6,7 +6,8 @@ import {
 } from '../utils/products/products.utils';
 import {
   send400ForInvalidProductId,
-  send404ForNotExistingProduct
+  send404ForNotExistingProduct,
+  send409ForInvalidProductName
 } from '../validations/products/products.validation';
 import { Product } from '../models';
 
@@ -41,6 +42,9 @@ export function sendCreatedProduct(
   next: NextFunction,
 ) {
   const product = request.body as Product;
+
+  if (send409ForInvalidProductName(product.name, response)) return;
+
   product.id = getNewProductId(products.length, deletedProductsIds) || '';
   products.push(product);
   response.send(product);

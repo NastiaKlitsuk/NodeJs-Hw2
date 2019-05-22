@@ -17,10 +17,10 @@
       true,
       {
         "multiline": {
-          "objects": "always",
+          "objects": "never",
           "arrays": "always",
           "functions": "always",
-          "typeLiterals": "always"
+          "typeLiterals": "ignore"
         },
         "esSpecCompliant": true
       }
