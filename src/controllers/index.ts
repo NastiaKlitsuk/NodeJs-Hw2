@@ -1,5 +1,5 @@
 import { Application } from 'express';
-import express from 'express';
+import * as express from 'express';
 import productsController from './products';
 
 export function initControllers(app: express.Application) {
