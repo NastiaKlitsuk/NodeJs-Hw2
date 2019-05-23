@@ -15,3 +15,7 @@ export function send400(response: Response) {
 export function send409(response: Response) {
   return response.sendStatus(409);
 }
+
+export function send204(response: Response) {
+  return response.sendStatus(204);
+}

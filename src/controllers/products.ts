@@ -3,7 +3,8 @@ import {
   getProducts,
   getProductById,
   createProduct,
-  updateProduct
+  updateProduct,
+  deleteProduct,
 } from '../routes/products';
 
 export default function setup(app: Application) {
@@ -11,4 +12,5 @@ export default function setup(app: Application) {
   app.get('/api/products/:id', getProductById);
   app.post('/api/products', createProduct);
   app.put('/api/products/:id', updateProduct);
+  app.delete('/api/products/:id', deleteProduct);
 }

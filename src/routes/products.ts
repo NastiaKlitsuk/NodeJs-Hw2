@@ -1,15 +1,13 @@
 import { store } from '../store';
 import { Request, Response, NextFunction } from 'express';
 import {
-  isProductExists,
-  getNewProductId
+  findProductById,
+  getNewProductId,
+  findProductIndex
 } from '../utils/products/products.utils';
-import {
-  send400ForInvalidProductId,
-  send404ForNotExistingProduct,
-  send409ForInvalidProductName
-} from '../validations/products/products.validation';
 import { Product } from '../models';
+import { send204 } from '../utils/http/http.utils';
+import { send409ForInvalidProductName } from '../validations/products/products.validation';
 
 const products = store.products;
 const deletedProductsIds = store.deletedProductsIds;
@@ -25,21 +23,15 @@ export function getProducts(
 export function getProductById(
   request: Request,
   response: Response,
-  next: NextFunction,
 ) {
   const id = request.params.id;
-  const maybeProduct = isProductExists(id, products);
-  const isExist = maybeProduct ? true : false;
-
-  if (send400ForInvalidProductId(id, response)) return;
-  if (send404ForNotExistingProduct(isExist, response)) return;
-  response.send(maybeProduct);
+  const product = findProductById(id);
+  response.send(product);
 }
 
 export function createProduct(
   request: Request,
   response: Response,
-  next: NextFunction,
 ) {
   const product = request.body as Product;
 
@@ -56,17 +48,27 @@ export function createProduct(
 export function updateProduct(
   request: Request,
   response: Response,
-  next: NextFunction,
 ) {
   const id = request.params.id;
-  const maybeProduct = isProductExists(id, products);
-  const isExist = maybeProduct ? true : false;
   const product = request.body as Product;
 
-  if (send400ForInvalidProductId(id, response)) return;
-  if (send404ForNotExistingProduct(isExist, response)) return;
   if (send409ForInvalidProductName(product.name, response)) return;
 
+  const maybeProduct = findProductById(id);
   Object.assign(maybeProduct, product);
   response.send(product);
+}
+
+export function deleteProduct(
+  request: Request,
+  response: Response,
+) {
+  const id = request.params.id;
+  const productToDeleteIndex = findProductIndex(id);
+
+  products.splice(productToDeleteIndex, 1);
+  send204(response);
+
+  // tslint:disable-next-line: no-console
+  console.log(products);
 }

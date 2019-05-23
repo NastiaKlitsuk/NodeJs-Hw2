@@ -1,12 +1,35 @@
 import { Product } from '../../models';
+import { store } from '../../store';
+import { Request, Response } from 'express';
 
-export function isProductExists(id: string, products: Product[]) {
+const products = store.products;
+
+export function setIsRequestedProductExists(request: Request, resposne: Response) {
+  const id = request.params.id;
+
+  // tslint:disable-next-line: no-console
+  console.log('in isRequestedProductExists', request.params);
+
+  if (id) {
+    const maybeProduct = findProductById(id);
+    resposne.locals.isProductExists = !!maybeProduct;
+  }
+}
+
+export function findProductById(id: string) {
   return products.find(product => product.id === id);
 }
 
 export function getNewProductId(
   productsCount: number,
-  deletedProductIds: string[],
+  // tslint:disable-next-line: trailing-comma
+  deletedProductIds: string[]
 ) {
-  return deletedProductIds.length ? deletedProductIds.shift() : (productsCount + 1).toString();
+  return deletedProductIds.length
+    ? deletedProductIds.shift()
+    : (productsCount + 1).toString();
+}
+
+export function findProductIndex(id: string) {
+  return products.findIndex(product => product.id === id);
 }
