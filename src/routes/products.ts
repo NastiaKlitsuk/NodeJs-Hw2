@@ -14,7 +14,7 @@ import { Product } from '../models';
 const products = store.products;
 const deletedProductsIds = store.deletedProductsIds;
 
-export function sendProducts(
+export function getProducts(
   request: Request,
   response: Response,
   next: NextFunction,
@@ -22,7 +22,7 @@ export function sendProducts(
   response.send(products);
 }
 
-export function sendProductById(
+export function getProductById(
   request: Request,
   response: Response,
   next: NextFunction,
@@ -36,7 +36,7 @@ export function sendProductById(
   response.send(maybeProduct);
 }
 
-export function sendCreatedProduct(
+export function createProduct(
   request: Request,
   response: Response,
   next: NextFunction,
@@ -51,4 +51,22 @@ export function sendCreatedProduct(
 
   // tslint:disable-next-line: no-console
   console.log(products);
+}
+
+export function updateProduct(
+  request: Request,
+  response: Response,
+  next: NextFunction,
+) {
+  const id = request.params.id;
+  const maybeProduct = isProductExists(id, products);
+  const isExist = maybeProduct ? true : false;
+  const product = request.body as Product;
+
+  if (send400ForInvalidProductId(id, response)) return;
+  if (send404ForNotExistingProduct(isExist, response)) return;
+  if (send409ForInvalidProductName(product.name, response)) return;
+
+  Object.assign(maybeProduct, product);
+  response.send(product);
 }
