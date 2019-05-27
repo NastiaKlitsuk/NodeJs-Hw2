@@ -15,40 +15,29 @@ const deletedProductsIds = store.deletedProductsIds;
 export function getProducts(
   request: Request,
   response: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   response.send(products);
 }
 
-export function getProductById(
-  request: Request,
-  response: Response,
-) {
+export function getProductById(request: Request, response: Response) {
   const id = request.params.id;
   const product = findProductById(id);
   response.send(product);
 }
 
-export function createProduct(
-  request: Request,
-  response: Response,
-) {
+export function createProduct(request: Request, response: Response) {
   const product = request.body as Product;
 
   if (send409ForInvalidProductName(product.name, response)) return;
 
   product.id = getNewProductId(products.length, deletedProductsIds) || '';
   products.push(product);
-  response.send(product);
-
-  // tslint:disable-next-line: no-console
-  console.log(products);
+  response.location(`/api/products/${product.id}`);
+  response.sendStatus(201);
 }
 
-export function updateProduct(
-  request: Request,
-  response: Response,
-) {
+export function updateProduct(request: Request, response: Response) {
   const id = request.params.id;
   const product = request.body as Product;
 
@@ -59,16 +48,10 @@ export function updateProduct(
   response.send(product);
 }
 
-export function deleteProduct(
-  request: Request,
-  response: Response,
-) {
+export function deleteProduct(request: Request, response: Response) {
   const id = request.params.id;
   const productToDeleteIndex = findProductIndex(id);
 
   products.splice(productToDeleteIndex, 1);
   send204(response);
-
-  // tslint:disable-next-line: no-console
-  console.log(products);
 }

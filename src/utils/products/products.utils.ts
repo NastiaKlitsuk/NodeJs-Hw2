@@ -7,9 +7,6 @@ const products = store.products;
 export function setIsRequestedProductExists(request: Request, resposne: Response) {
   const id = request.params.id;
 
-  // tslint:disable-next-line: no-console
-  console.log('in isRequestedProductExists', request.params);
-
   if (id) {
     const maybeProduct = findProductById(id);
     resposne.locals.isProductExists = !!maybeProduct;
